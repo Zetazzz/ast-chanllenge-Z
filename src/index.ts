@@ -1,5 +1,6 @@
 import babelTraverse from "@babel/traverse";
-import { parse, ParserPlugin } from "@babel/parser";
+import { parse, ParseResult, ParserPlugin } from "@babel/parser";
+import { File, Identifier } from "@babel/types";
 
 // using 3 underscores around a parameter in template to prevent wrongly replacing normal identifiers.
 const TEMPLATE = `
@@ -26,6 +27,18 @@ const DEFAULT_CONFIG = {
   ___keyName___: "poolsQuery",
 };
 
+/**
+ * Function of creating an AST based on input types and configs.
+ * @param {Object=} input - input request and response types. input can be null or empty, in such cases the function will use values in config.
+ * @param {Object=} config - config for customizing parts in returned AST.
+ * @param {string} [config.___queryInterface___=UsePoolsQuery] - query interface
+ * @param {string} [config.___hookName___=usePools] - hook name
+ * @param {string} [config.___requestType___=QueryPoolsRequest] - request type
+ * @param {string} [config.___responseType___=QueryPoolsResponse] - response type
+ * @param {string} [config.___queryServiceMethodName___=pools] - queryService method name
+ * @param {string} [config.___keyName___=poolsQuery] - key name
+ * @returns {ParseResult} created AST
+ */
 export default (
   input?: {
     [key: string]: {
@@ -36,7 +49,7 @@ export default (
   config?: {
     [key: string]: string;
   }
-) => {
+): ParseResult<File> => {
   let params = Object.assign(DEFAULT_CONFIG, config);
 
   // input can be null or empty, in such cases default values in config will be used.
@@ -60,9 +73,36 @@ export default (
 
   // replace parameters while traversal.
   babelTraverse(ast, {
-    Identifier(path) {
-      if (params[path.node.name]) {
-        path.node.name = params[path.node.name];
+    VariableDeclarator(path) {
+      let id = path.node.id as Identifier;
+
+      if (id) {
+        if (params[id.name]) {
+          id.name = params[id.name];
+        }
+      }
+    },
+    TSTypeReference(path) {
+      let id = path.node.typeName as Identifier;
+
+      if (id) {
+        if (params[id.name]) {
+          id.name = params[id.name];
+        }
+      }
+    },
+    TSInterfaceDeclaration(path) {
+      if (params[path.node.id.name]) {
+        path.node.id.name = params[path.node.id.name];
+      }
+    },
+    MemberExpression(path) {
+      let id = path.node.property as Identifier;
+
+      if (id) {
+        if (params[id.name]) {
+          id.name = params[id.name];
+        }
       }
     },
     StringLiteral(path) {
