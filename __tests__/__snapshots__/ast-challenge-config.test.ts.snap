@@ -1,0 +1,65 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`works for combination of customized and default configs 1`] = `
+"export interface UsePoolsQuery<TData> extends ReactQueryParams<QueryPoolsResponse, TData> {
+  request?: QueryPoolsRequest;
+}
+
+const testUsePools = <TData = QueryPoolsResponse,>({
+  request,
+  options
+}: UsePoolsQuery<TData>) => {
+  return useQuery<QueryPoolsResponse, Error, TData>([\\"poolsQuery\\", request], () => {
+    if (!queryService) throw new Error(\\"Query Service not initialized\\");
+    return queryService.pools(request);
+  }, options);
+};"
+`;
+
+exports[`works for empty input 1`] = `
+"export interface UsePoolsQuery<TData> extends ReactQueryParams<QueryPoolsResponse, TData> {
+  request?: QueryPoolsRequest;
+}
+
+const usePools = <TData = QueryPoolsResponse,>({
+  request,
+  options
+}: UsePoolsQuery<TData>) => {
+  return useQuery<QueryPoolsResponse, Error, TData>([\\"poolsQuery\\", request], () => {
+    if (!queryService) throw new Error(\\"Query Service not initialized\\");
+    return queryService.pools(request);
+  }, options);
+};"
+`;
+
+exports[`works for input request and response types override the types in configs 1`] = `
+"export interface UsePoolsQuery<TData> extends ReactQueryParams<InputQueryPoolsResponse, TData> {
+  request?: InputQueryPoolsRequest;
+}
+
+const usePools = <TData = InputQueryPoolsResponse,>({
+  request,
+  options
+}: UsePoolsQuery<TData>) => {
+  return useQuery<InputQueryPoolsResponse, Error, TData>([\\"poolsQuery\\", request], () => {
+    if (!queryService) throw new Error(\\"Query Service not initialized\\");
+    return queryService.pools(request);
+  }, options);
+};"
+`;
+
+exports[`works for null input 1`] = `
+"export interface UsePoolsQuery<TData> extends ReactQueryParams<QueryPoolsResponse, TData> {
+  request?: QueryPoolsRequest;
+}
+
+const usePools = <TData = QueryPoolsResponse,>({
+  request,
+  options
+}: UsePoolsQuery<TData>) => {
+  return useQuery<QueryPoolsResponse, Error, TData>([\\"poolsQuery\\", request], () => {
+    if (!queryService) throw new Error(\\"Query Service not initialized\\");
+    return queryService.pools(request);
+  }, options);
+};"
+`;

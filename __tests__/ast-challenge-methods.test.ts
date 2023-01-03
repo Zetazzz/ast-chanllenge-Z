@@ -2,7 +2,7 @@ import generate from "@babel/generator";
 import queryASTCreator from "../src";
 import methods from "../example-methods.json";
 
-const expectCode = (ast, snapshotName?) => {
+const expectCode = (ast, snapshotName: string = "") => {
   expect(generate(ast).code).toMatchSnapshot(snapshotName);
 };
 

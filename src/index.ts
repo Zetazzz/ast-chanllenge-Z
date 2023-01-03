@@ -50,7 +50,7 @@ export default (
     [key: string]: string;
   }
 ): ParseResult<File> => {
-  let params = Object.assign(DEFAULT_CONFIG, config);
+  let params = Object.assign({}, DEFAULT_CONFIG, config);
 
   // input can be null or empty, in such cases default values in config will be used.
   if (input) {
